@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MG Marketing Consulting — Estrategia que mueve marcas</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0C0C0C;
+    --surface: #141414;
+    --border: #222;
+    --text: #F0EDE8;
+    --accent: #C8F441;
+    --accent2: #FF4B2B;
+    --muted: #666;
+    --condensed: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor-follower {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.12s ease;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4vw;
+    border-bottom: 1px solid var(--border);
+    background: rgba(12,12,12,0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    font-family: var(--condensed);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  nav a.nav-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a.nav-link:hover { color: var(--accent); }
+
+  nav a.cta-nav {
+    font-family: var(--condensed);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: #000;
+    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+
+  nav a.cta-nav:hover { background: #e0ff70; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 4vw 5rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--condensed);
+    font-size: clamp(12rem, 22vw, 22rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px #1e1e1e;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+    animation: bgFloat 8s ease-in-out infinite;
+  }
+
+  @keyframes bgFloat {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -51%) scale(1.01); }
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeIn 0.6s 0.3s ease forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-eyebrow span {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: var(--condensed);
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.5s ease forwards;
+  }
+
+  .hero h1 .accent { color: var(--accent); font-style: italic; }
+  .hero h1 .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--text);
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeIn 0.8s 0.8s ease forwards;
+  }
+
+  .hero-bottom p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .hero-cta { display: flex; flex-direction: column; gap: 1rem; justify-content: center; align-items: flex-start; }
+
+  .btn-primary {
+    font-family: var(--condensed);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--accent);
+    color: #000;
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    display: inline-block;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '→';
+    margin-left: 0.8rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .btn-primary:hover { background: #e0ff70; }
+  .btn-primary:hover::after { transform: translateX(4px); }
+
+  .btn-outline {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-outline::before { content: '↓'; }
+  .btn-outline:hover { color: var(--text); }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .hero-stat .num {
+    font-family: var(--condensed);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .hero-stat .label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 1.2rem 0;
+    background: var(--surface);
+  }
+
+  .marquee {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee span {
+    font-family: var(--condensed);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .marquee span.accent { color: var(--accent); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* PROBLEMA */
+  .problema {
+    padding: 8rem 4vw;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 8rem;
+    align-items: start;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .problema-left {
+    position: sticky;
+    top: 8rem;
+  }
+
+  .problema-left .section-tag {
+    display: inline-block;
+    border: 1px solid var(--border);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .problema-left h2 {
+    font-family: var(--condensed);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .problema-left h2 .hl { color: var(--accent); }
+
+  .problema-right p {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+    padding-top: 0.5rem;
+  }
+
+  .problema-right p:first-child { padding-top: 0; }
+
+  .callout {
+    border: 1px solid var(--accent);
+    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .callout p {
+    font-family: var(--condensed);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* SERVICIOS */
+  .servicios {
+    padding: 8rem 4vw 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .servicios-title {
+    font-family: var(--condensed);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 5rem;
+  }
+
+  .servicios-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--text);
+  }
+
+  .servicio-row {
+    display: grid;
+    grid-template-columns: 5rem 1fr 2fr auto;
+    gap: 3rem;
+    align-items: start;
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .servicio-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  .servicio-row:hover::before { width: 100%; }
+
+  .servicio-row:hover .srv-num { color: var(--accent); }
+
+  .srv-num {
+    font-family: var(--condensed);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--border);
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+    padding-top: 0.3rem;
+  }
+
+  .srv-name {
+    font-family: var(--condensed);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .srv-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .srv-tag {
+    align-self: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .last-row { border-bottom: 1px solid var(--border); }
+
+  /* METODOLOGÍA */
+  .metodologia {
+    padding: 8rem 4vw;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metodologia-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 6rem;
+  }
+
+  .metodologia-header h2 {
+    font-family: var(--condensed);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .metodologia-header p { color: var(--muted); line-height: 1.8; }
+
+  .pasos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .paso-box {
+    background: var(--surface);
+    padding: 3rem 2.5rem;
+    transition: background 0.3s;
+  }
+
+  .paso-box:hover { background: #1a1a1a; }
+
+  .paso-box:hover .paso-num-big { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
+
+  .paso-num-big {
+    font-family: var(--condensed);
+    font-size: 5rem;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    line-height: 1;
+    margin-bottom: 2rem;
+    transition: all 0.3s;
+  }
+
+  .paso-box h3 {
+    font-family: var(--condensed);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .paso-box p { font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+
+  /* SOBRE MI */
+  .sobre {
+    padding: 8rem 4vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sobre-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .sobre h2 {
+    font-family: var(--condensed);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 2.5rem;
+  }
+
+  .sobre p {
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  .sobre-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sobre-card::before {
+    content: 'MG';
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    font-family: var(--condensed);
+    font-size: 10rem;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    line-height: 1;
+  }
+
+  .sobre-card .name {
+    font-family: var(--condensed);
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .sobre-card .title {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 3rem;
+  }
+
+  .sobre-card .tag {
+    display: inline-block;
+    border: 1px solid var(--border);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    color: var(--muted);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 10rem 4vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cta-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--condensed);
+    font-size: clamp(8rem, 20vw, 20rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    pointer-events: none;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .cta-inner h2 {
+    font-family: var(--condensed);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-inner h2 .hl { color: var(--accent); display: block; }
+
+  .cta-inner p {
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 500px;
+    margin: 0 auto 3.5rem;
+    font-size: 1rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-ghost {
+    font-family: var(--condensed);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--border);
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--text);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-bottom { grid-template-columns: 1fr 1fr; }
+    .problema { grid-template-columns: 1fr; gap: 3rem; }
+    .problema-left { position: static; }
+    .servicio-row { grid-template-columns: 3rem 1fr; }
+    .srv-desc, .srv-tag { display: none; }
+    .metodologia-header { grid-template-columns: 1fr; }
+    .pasos-grid { grid-template-columns: 1fr 1fr; }
+    .sobre { grid-template-columns: 1fr; }
+    .sobre-card { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-bottom { grid-template-columns: 1fr; }
+    .pasos-grid { grid-template-columns: 1fr; }
+    .nav-right .nav-link { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursor-follower"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">MG <span>●</span> Marketing</a>
+  <div class="nav-right">
+    <a href="#servicios" class="nav-link">Servicios</a>
+    <a href="#proceso" class="nav-link">Proceso</a>
+    <a href="#contacto" class="cta-nav">Agendar reunión</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">Estrategia</div>
+  <div class="hero-eyebrow"><span>Consultoría estratégica de marketing</span></div>
+  <h1>
+    Marketing<br>
+    <span class="accent">estratégico</span><br>
+    <span class="outline">para marcas</span>
+  </h1>
+  <div class="hero-bottom">
+    <p>Ayudo a emprendedores, pymes y marcas en crecimiento a ordenar su comunicación, mejorar su presencia digital y diseñar estrategias concretas para atraer clientes, diferenciarse y vender mejor.</p>
+    <div class="hero-cta">
+      <a href="#contacto" class="btn-primary">Quiero ordenar mi marketing</a>
+      <a href="#servicios" class="btn-outline">Ver servicios</a>
+    </div>
+    <div style="display:flex; gap:3rem;">
+      <div class="hero-stat">
+        <span class="num">6</span>
+        <span class="label">Servicios especializados</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">4</span>
+        <span class="label">Etapas metodológicas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Diagnóstico</span>
+    <span class="accent">●</span>
+    <span>Estrategia de marca</span>
+    <span class="accent">●</span>
+    <span>Contenidos</span>
+    <span class="accent">●</span>
+    <span>Redes sociales</span>
+    <span class="accent">●</span>
+    <span>Estrategia comercial</span>
+    <span class="accent">●</span>
+    <span>Acompañamiento</span>
+    <span class="accent">●</span>
+    <span>Diagnóstico</span>
+    <span class="accent">●</span>
+    <span>Estrategia de marca</span>
+    <span class="accent">●</span>
+    <span>Contenidos</span>
+    <span class="accent">●</span>
+    <span>Redes sociales</span>
+    <span class="accent">●</span>
+    <span>Estrategia comercial</span>
+    <span class="accent">●</span>
+    <span>Acompañamiento</span>
+    <span class="accent">●</span>
+  </div>
+</div>
+
+<!-- PROBLEMA -->
+<section class="problema reveal">
+  <div class="problema-left">
+    <div class="section-tag">El problema</div>
+    <h2>Tu marketing<br>está <span class="hl">desordenado.</span></h2>
+  </div>
+  <div class="problema-right">
+    <p>Muchos negocios tienen potencial, pero no logran crecer porque su marketing está desorganizado. Publican sin planificación, no tienen definido su público objetivo, no comunican claramente su propuesta de valor.</p>
+    <p>No se diferencian de la competencia y no cuentan con un camino estratégico para convertir sus acciones en resultados. Están haciendo mucho, pero sin dirección.</p>
+    <p>MG Marketing Consulting ayuda a ordenar ese proceso, detectando problemas, oportunidades y acciones concretas para mejorar la comunicación, la presencia digital y la estrategia comercial del negocio.</p>
+    <div class="callout">
+      <p>Menos improvisación.<br>Más estrategia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="servicios" id="servicios">
+  <h2 class="servicios-title reveal">Servi<span class="outline">cios</span></h2>
+  <div class="servicio-row reveal">
+    <div class="srv-num">01</div>
+    <div class="srv-name">Diagnóstico de marketing</div>
+    <div class="srv-desc">Analizamos la situación actual de tu negocio para detectar problemas, oportunidades y puntos de mejora. Revisamos comunicación, redes, propuesta de valor, competencia y canales digitales.</div>
+    <div class="srv-tag">Análisis</div>
+  </div>
+  <div class="servicio-row reveal">
+    <div class="srv-num">02</div>
+    <div class="srv-name">Estrategia de marca</div>
+    <div class="srv-desc">Definimos la identidad, personalidad, propuesta de valor y posicionamiento de tu marca para que puedas comunicar con mayor claridad y diferenciarte en el mercado.</div>
+    <div class="srv-tag">Identidad</div>
+  </div>
+  <div class="servicio-row reveal">
+    <div class="srv-num">03</div>
+    <div class="srv-name">Estrategia de contenidos</div>
+    <div class="srv-desc">Creamos una planificación de contenidos alineada a tus objetivos, con ideas, pilares de comunicación y formatos pensados para conectar mejor con tu público.</div>
+    <div class="srv-tag">Contenidos</div>
+  </div>
+  <div class="servicio-row reveal">
+    <div class="srv-num">04</div>
+    <div class="srv-name">Optimización de redes</div>
+    <div class="srv-desc">Mejoramos tus perfiles digitales para que comuniquen de forma más profesional, clara y atractiva. Trabajamos sobre biografía, destacados, estética, llamados a la acción y experiencia del usuario.</div>
+    <div class="srv-tag">Social media</div>
+  </div>
+  <div class="servicio-row reveal">
+    <div class="srv-num">05</div>
+    <div class="srv-name">Estrategia comercial digital</div>
+    <div class="srv-desc">Ordenamos el recorrido del cliente desde que descubre tu marca hasta que consulta o compra. Mejoramos mensajes, canales de contacto y oportunidades de conversión.</div>
+    <div class="srv-tag">Conversión</div>
+  </div>
+  <div class="servicio-row last-row reveal">
+    <div class="srv-num">06</div>
+    <div class="srv-name">Acompañamiento mensual</div>
+    <div class="srv-desc">Acompañamos el crecimiento de tu marca con planificación, seguimiento, análisis y ajustes estratégicos para que puedas avanzar de forma sostenida.</div>
+    <div class="srv-tag">Ongoing</div>
+  </div>
+</section>
+
+<!-- METODOLOGÍA -->
+<section class="metodologia" id="proceso">
+  <div class="metodologia-header reveal">
+    <h2>Cómo<br>trabajamos</h2>
+    <p>Un proceso simple, claro y orientado a la acción. Cada proyecto se adapta a la realidad de tu marca. No usamos soluciones genéricas porque cada negocio tiene su propio contexto y sus propias oportunidades.</p>
+  </div>
+  <div class="pasos-grid">
+    <div class="paso-box reveal">
+      <div class="paso-num-big">01</div>
+      <h3>Diagnóstico</h3>
+      <p>Analizamos qué vendés, a quién, cómo comunicás, qué canales usás y contra quién competís.</p>
+    </div>
+    <div class="paso-box reveal">
+      <div class="paso-num-big">02</div>
+      <h3>Estrategia</h3>
+      <p>Ordenamos objetivos, identificamos oportunidades y establecemos un plan de acción adaptado a tu realidad.</p>
+    </div>
+    <div class="paso-box reveal">
+      <div class="paso-num-big">03</div>
+      <h3>Implementación</h3>
+      <p>La estrategia se transforma en acciones concretas: mejoras en redes, calendarios, mensajes, campañas.</p>
+    </div>
+    <div class="paso-box reveal">
+      <div class="paso-num-big">04</div>
+      <h3>Medición</h3>
+      <p>Revisamos los resultados, analizamos avances y proponemos ajustes para optimizar la estrategia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MI -->
+<section class="sobre reveal">
+  <div>
+    <p class="sobre-label">Sobre mí</p>
+    <h2>Estrategia,<br>análisis y<br>visión comercial.</h2>
+    <p>Soy Mauricio González, estudiante de Licenciatura en Marketing, con interés en la estrategia, la comunicación, el análisis de mercado y el crecimiento de marcas.</p>
+    <p>Mi enfoque combina análisis, creatividad y visión comercial para ayudar a emprendedores y negocios a ordenar sus ideas, mejorar su comunicación y construir una estrategia de marketing más clara.</p>
+    <p>Creo que muchas marcas no necesitan hacer más cosas, sino hacerlas con mayor intención.</p>
+    <a href="#contacto" class="btn-primary" style="margin-top:2rem">Hablemos de tu marca</a>
+  </div>
+  <div class="sobre-card">
+    <div class="name">Mauricio González</div>
+    <div class="title">Marketing Consultant · Rosario, ARG</div>
+    <span class="tag">Estrategia</span>
+    <span class="tag">Contenidos</span>
+    <span class="tag">Marca</span>
+    <span class="tag">Análisis</span>
+    <span class="tag">Digital</span>
+    <span class="tag">Redes</span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contacto">
+  <div class="cta-bg">Crecer</div>
+  <div class="cta-inner reveal">
+    <h2>Tu marca<br><span class="hl">puede más.</span></h2>
+    <p>Necesita una estrategia clara para aprovechar todo su potencial. En MG Marketing Consulting te ayudo a ordenar tu marketing y construir un camino de crecimiento real.</p>
+    <div class="cta-buttons">
+      <a href="mailto:contacto@mgmarketing.com" class="btn-primary">Agendar una reunión</a>
+      <a href="#servicios" class="btn-ghost">Ver servicios</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">MG <span style="color:var(--accent)">●</span> Marketing</a>
+  <p>Marketing estratégico para marcas que quieren crecer con claridad.</p>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursor-follower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateFollower() {
+    fx += (mx - fx) * 0.15;
+    fy += (my - fy) * 0.15;
+    follower.style.left = fx + 'px';
+    follower.style.top = fy + 'px';
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
